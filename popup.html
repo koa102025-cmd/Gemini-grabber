@@ -4,9 +4,27 @@
 		<meta charset="utf-8" />
 		<style>
 			body {
-				width: 200px;
-				padding: 10px;
+				width: 280px;
+				padding: 12px;
 				font-family: sans-serif;
+			}
+			h3 {
+				margin: 0 0 10px;
+			}
+			label {
+				display: block;
+				font-size: 12px;
+				margin-bottom: 4px;
+				color: #333;
+			}
+			select,
+			input[type="number"] {
+				width: 100%;
+				padding: 6px;
+				margin-bottom: 10px;
+				border: 1px solid #ccc;
+				border-radius: 4px;
+				box-sizing: border-box;
 			}
 			button {
 				width: 100%;
@@ -17,17 +35,78 @@
 				border: none;
 				border-radius: 4px;
 			}
+			.check {
+				display: flex;
+				align-items: flex-start;
+				gap: 6px;
+				margin-bottom: 10px;
+				font-size: 12px;
+				line-height: 1.35;
+				cursor: pointer;
+			}
+			.check input {
+				margin: 2px 0 0;
+				flex: none;
+			}
 			#status {
 				margin-top: 10px;
 				font-size: 12px;
 				color: green;
+				white-space: pre-wrap;
+			}
+			.hint {
+				margin-top: 10px;
+				font-size: 11px;
+				color: #666;
+				line-height: 1.4;
+			}
+			#resetBtn {
+				margin-top: 8px;
+				background: none;
+				border: none;
+				color: #888;
+				font-size: 11px;
+				text-decoration: underline;
+				cursor: pointer;
+				padding: 0;
+				width: auto;
 			}
 		</style>
 	</head>
 	<body>
 		<h3>Gemini Grabber</h3>
-		<button id="grabBtn">Собрать весь чат</button>
+
+		<label for="mode">Что копировать</label>
+		<select id="mode">
+			<option value="new">Только новые (с прошлого раза)</option>
+			<option value="last">Последние N ответов</option>
+			<option value="all">Весь чат</option>
+		</select>
+
+		<div id="limitRow" style="display: none">
+			<label for="limit">Сколько последних ответов</label>
+			<input id="limit" type="number" min="1" max="500" value="10" />
+		</div>
+
+		<label class="check">
+			<input type="checkbox" id="unwrap" />
+			Склеить разорванные строки в абзацы
+		</label>
+
+		<label class="check">
+			<input type="checkbox" id="strip" />
+			Убрать разметку (<b>*</b>, <b>#</b>, <b>&gt;</b>, <b>`</b>) — только чистый
+			текст
+		</label>
+
+		<button id="grabBtn">Собрать ответы модели</button>
 		<div id="status"></div>
+		<button id="resetBtn">Сбросить отметку «уже скопировано»</button>
+
+		<div class="hint">
+			Расширение само пролистывает чат вверх и догружает старые сообщения —
+			вручную мотать не нужно. Не закрывай попап, пока идёт сбор.
+		</div>
 
 		<script src="popup.js"></script>
 	</body>
